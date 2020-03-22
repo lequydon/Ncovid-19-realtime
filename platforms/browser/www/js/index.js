@@ -81,11 +81,34 @@ $(document).ready(function(){
                     }
                 }
             }],
+            shapeCreated: onShapeCreated,
             click: onClick,
             shapeFeatureCreated: onShapeFeatureCreated,
             shapeClick: onShapeClick
         });
         var flag=0;
+        function onShapeCreated(e){
+            for(i in data){
+                if(e.shape.dataItem.properties.name=="United States of America")
+                e.shape.dataItem.properties.name="USA"
+                if(e.shape.dataItem.properties.name=="United Kingdom")
+                e.shape.dataItem.properties.name="UK"
+                if(data[i].country==e.shape.dataItem.properties.name){
+                    if(data[i].cases>0 && data[i].cases<1000)
+                    {
+                        var shape = e.shape;
+                        shape.options.set("fill.color", "#0588d2");
+                    }
+                    if(data[i].cases>=1000)
+                    {
+                        var shape = e.shape;
+                        shape.options.set("fill.color", "#006ca9");
+                    }
+                    
+                }
+            }
+            
+        }
         function onShapeClick(e){
             flag=1;
             for(i in data){
@@ -132,6 +155,7 @@ $(document).ready(function(){
                 if(e.properties.name=="United Kingdom")
                 e.properties.name="UK"
                 if(data[i].country==e.properties.name){
+                    
                     e.group.options.tooltip = {
                         content: "<h4>"+data[i].country+"</h4><div>Ca nhiễm(cases):"+data[i].cases+"</div><div>Tử vong(deaths):"+data[i].deaths+"</div><div>Chữa khỏi(recovered):"+data[i].recovered+"</div>",
                         position: "cursor",
